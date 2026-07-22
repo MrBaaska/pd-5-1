@@ -304,6 +304,7 @@
       grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
       margin-top: var(--topbar-height);
       min-height: calc(100dvh - var(--topbar-height));
+      height: calc(100dvh - var(--topbar-height));
     }
 
     /* ═══════════════════════ SIDEBAR ═══════════════════════ */
@@ -426,8 +427,11 @@
       min-width: 0;
       background: var(--bg-deep);
       background-image: var(--rail-stripe);
-      overflow: auto;
+      overflow: hidden;
       padding: var(--shell-gap);
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
     }
 
     /* Welcome / Dashboard panel */
@@ -437,6 +441,10 @@
       margin: 0;
       padding: 0;
       min-width: 0;
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
     }
     .dash-hero {
       position: relative;
@@ -556,9 +564,10 @@
       border: 1px solid var(--border);
       border-radius: 18px;
       overflow: hidden;
-      height: var(--frame-min-height);
-      min-height: 520px;
+      height: 100%;
+      min-height: 0;
       display: flex;
+      flex: 1;
       flex-direction: column;
       box-shadow: 0 16px 48px rgba(0, 0, 0, 0.22);
     }
@@ -579,6 +588,7 @@
     }
     #content-frame {
       width: 100%;
+      height: 100%;
       flex: 1;
       min-height: 0;
       border: none;
@@ -698,18 +708,21 @@
       }
       .main {
         padding: 12px;
+        display: block;
+        overflow: auto;
+        min-height: calc(100dvh - var(--topbar-height));
       }
       .content-frame-wrap {
         width: 100%;
         max-width: none;
         height: auto;
-        min-height: calc(100dvh - 104px);
+        min-height: calc(100dvh - var(--topbar-height) - 24px);
         display: block;
         overflow: visible;
       }
       #content-frame {
         flex: none;
-        min-height: calc(100dvh - 160px);
+        min-height: calc(100dvh - var(--topbar-height) - 78px);
       }
     }
 
