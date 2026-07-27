@@ -1154,8 +1154,8 @@
                     <input type="text" id="job" placeholder="Ажлын нэр">
                     <div class="name-selector">
                         <div class="name-selector-head">
-                            <input type="text" id="nameSearch" placeholder="Нэр шүүж эсвэл шинэ нэр бичих">
-                            <button type="button" id="addNameOption">Нэмэх</button>
+                            <input type="text" id="nameSearch" placeholder="Нэр шүүж хайх">
+                            <button type="button" id="addNameOption">Сонгох</button>
                         </div>
                         <div class="name-selector-meta">
                             <span>Товшиж сонгох</span>
@@ -1233,27 +1233,36 @@
             const RECORDS_STORE_NAME = "app_storage";
             const RECORDS_PRIMARY_KEY = "saved_records";
             const DEFAULT_EMPLOYEE_NAMES = [
-                "пр-1 Б.Бат",
-                "пр-2 Ц.Дорж",
-                "пр-3 Г.Отгон",
-                "пр-4 Г.Нэргүй",
-                "пр-5 Д.Түмэн",
-                "пр-6 С.Баяр",
-                "пр-7 П.Ганбат",
-                "пр-8 Р.Мөнх",
-                "пр-9 Л.Эрдэнэ",
-                "пр-10 Ш.Төгөлдөр",
-                "пр-11 Т.Болор",
-                "пр-12 Н.Энхболд",
-                "пр-13 М.Хишиг",
-                "пр-14 А.Оргил",
-                "пр-15 Х.Сүхбат",
-                "пр-16 Д.Номин",
-                "пр-17 Б.Тэмүүлэн",
-                "пр-18 Г.Уянга",
-                "пр-19 С.Эрдэнэсайхан",
-                "пр-20 Ц.Энхмэнд"
+                "пр-5 М.Нямжав",
+                "пр-4 Д.Намхайнямбуу",
+                "пр-4 С.Батмөнх",
+                "пр-4 Б.Гансүх",
+                "пр-4 М.Нуркали",
+                "пр-4 М.Золбабяр",
+                "пр-4 А.Ариунболд",
+                "пр-3 А.Бадамзориг",
+                "пр-3 М.Сүхболд",
+                "пр-3 Т.Буянхишиг",
+                "пр-3 Ё.Бямбасүрэн",
+                "пр-3 Б.Мөнхжаргал",
+                "пр-3 Н.Лхагвадулам",
+                "пр-3 Г.Эзэнжаргал",
+                "пр-3 Г.Пүрэвдолгор",
+                "пр-3 А.НандинЭрдэнэ",
+                "пр-3 С.Досканат",
+                "Т/З М.Хадбаатар",
+                "Т/З Ж.Нэргүй",
+                "Г/Ж П.Бямбасүрэн",
+                "Г/Ж Н.Отгонтуяа",
+                "Г/Ж Б.Гантөгс",
+                "Г/Ж Ц.Сувдмаа",
+                "жолооч Ч.Базарсад",
+          
             ];
+            const LOCKED_EMPLOYEE_NAMES = Array.from(new Set(
+                DEFAULT_EMPLOYEE_NAMES.map(normalizeName).filter(Boolean)
+            )).sort((left, right) => left.localeCompare(right, "mn"));
+            const LOCKED_EMPLOYEE_NAME_SET = new Set(LOCKED_EMPLOYEE_NAMES);
             let savedRecords = [];
             let employeeNames = [];
             let selectedNames = new Set();
@@ -1268,6 +1277,10 @@
             } catch (error) {
                 console.error("Employee names save error:", error);
             }
+        }
+
+        function isAllowedEmployeeName(name) {
+            return LOCKED_EMPLOYEE_NAME_SET.has(normalizeName(name));
         }
 
         function clearWorkerDraft() {
@@ -1286,7 +1299,7 @@
             }));
 
             const payload = {
-                selectedNames: Array.from(selectedNames),
+                selectedNames: Array.from(selectedNames).filter(isAllowedEmployeeName),
                 workers,
                 recentSelectionHtml: recentSelectionPanel ? recentSelectionPanel.innerHTML : "",
                 recentSelectionVisible: recentSelectionPanel ? recentSelectionPanel.style.display === "block" : false
@@ -1379,7 +1392,7 @@
 
                 const parsed = JSON.parse(raw);
                 const selectedFromDraft = Array.isArray(parsed?.selectedNames)
-                    ? parsed.selectedNames.map(normalizeName).filter(Boolean)
+                    ? parsed.selectedNames.map(normalizeName).filter(isAllowedEmployeeName)
                     : [];
                 selectedNames = new Set(selectedFromDraft);
 
@@ -1390,7 +1403,7 @@
                 if (Array.isArray(parsed?.workers) && parsed.workers.length > 0) {
                     parsed.workers.forEach((worker) => {
                         const name = normalizeName(worker?.name);
-                        if (!name) {
+                        if (!name || !isAllowedEmployeeName(name)) {
                             return;
                         }
                         const job = (worker?.job || "").trim();
@@ -1400,11 +1413,11 @@
                 }
 
                 if (recentSelectionPanel) {
-                    recentSelectionPanel.innerHTML = parsed?.recentSelectionHtml || "";
-                    recentSelectionPanel.style.display = parsed?.recentSelectionVisible && recentSelectionPanel.innerHTML
-                        ? "block"
-                        : "none";
+                    recentSelectionPanel.innerHTML = "";
+                    recentSelectionPanel.style.display = "none";
                 }
+
+                saveWorkerDraft();
             } catch (error) {
                 console.error("Worker draft load error:", error);
                 clearWorkerDraft();
@@ -1412,65 +1425,25 @@
         }
 
         function loadEmployeeNames() {
-            try {
-                const raw = localStorage.getItem(NAME_DIRECTORY_KEY);
-                if (raw) {
-                    const parsed = JSON.parse(raw);
-                    if (Array.isArray(parsed)) {
-                        employeeNames = Array.from(new Set([
-                            ...parsed.map(normalizeName).filter(Boolean),
-                            ...DEFAULT_EMPLOYEE_NAMES.map(normalizeName)
-                        ])).sort((left, right) => left.localeCompare(right, "mn"));
-                        persistEmployeeNames();
-                        return;
-                    }
-                }
-
-                const seededNames = [];
-                savedRecords.forEach((record) => {
-                    if (!record || !Array.isArray(record.workers)) {
-                        return;
-                    }
-                    record.workers.forEach((worker) => {
-                        const normalized = normalizeName(worker && worker.name);
-                        if (normalized) {
-                            seededNames.push(normalized);
-                        }
-                    });
-                });
-                employeeNames = Array.from(new Set([
-                    ...seededNames,
-                    ...DEFAULT_EMPLOYEE_NAMES.map(normalizeName)
-                ])).sort((left, right) => left.localeCompare(right, "mn"));
-                persistEmployeeNames();
-            } catch (error) {
-                console.error("Employee names load error:", error);
-                employeeNames = [...DEFAULT_EMPLOYEE_NAMES].sort((left, right) => left.localeCompare(right, "mn"));
-                persistEmployeeNames();
-            }
+            employeeNames = [...LOCKED_EMPLOYEE_NAMES];
+            persistEmployeeNames();
         }
 
         function setEmployeeNames(nextNames) {
-            employeeNames = Array.from(new Set(nextNames.map(normalizeName).filter(Boolean))).sort((left, right) => left.localeCompare(right, "mn"));
+            employeeNames = Array.from(new Set(nextNames.map(normalizeName).filter(isAllowedEmployeeName))).sort((left, right) => left.localeCompare(right, "mn"));
             persistEmployeeNames();
             renderNameOptions();
         }
 
         function addEmployeeName(name) {
             const normalized = normalizeName(name);
-            if (!normalized) {
+            if (!normalized || !nameSearchInput) {
                 return false;
             }
 
-            if (normalized.length < 2) {
-                alert("Нэр хамгийн багадаа 2 тэмдэгттэй байна.");
+            if (!isAllowedEmployeeName(normalized)) {
+                alert(`\"${normalized}\" нэр жагсаалтад байхгүй байна. Зөвхөн жагсаалтад байгаа нэрийг сонгоно уу.`);
                 return false;
-            }
-
-            if (!employeeNames.includes(normalized)) {
-                employeeNames.push(normalized);
-                employeeNames.sort((left, right) => left.localeCompare(right, "mn"));
-                persistEmployeeNames();
             }
 
             selectedNames.add(normalized);
@@ -1480,46 +1453,13 @@
         }
 
         function editEmployeeName(oldName) {
-            const nextName = normalizeName(window.prompt("Нэрийг засах", oldName));
-            if (!nextName) {
-                return;
-            }
-
-            if (nextName.length < 2) {
-                alert("Нэр хамгийн багадаа 2 тэмдэгттэй байна.");
-                return;
-            }
-
-            if (nextName === oldName) {
-                return;
-            }
-
-            if (employeeNames.includes(nextName)) {
-                alert("Энэ нэр аль хэдийн байна!");
-                return;
-            }
-
-            employeeNames = employeeNames.map((name) => (name === oldName ? nextName : name));
-            if (selectedNames.has(oldName)) {
-                selectedNames.delete(oldName);
-                selectedNames.add(nextName);
-            }
-            persistEmployeeNames();
-            renderNameOptions();
-            saveWorkerDraft();
+            void oldName;
+            alert("Нэр засах боломж хаалттай.");
         }
 
         function deleteEmployeeName(name) {
-            const confirmed = window.confirm(`"${name}" нэрийг устгах уу?`);
-            if (!confirmed) {
-                return;
-            }
-
-            employeeNames = employeeNames.filter((item) => item !== name);
-            selectedNames.delete(name);
-            persistEmployeeNames();
-            renderNameOptions();
-            saveWorkerDraft();
+            void name;
+            alert("Нэр устгах боломж хаалттай.");
         }
 
         function getKnownNames() {
@@ -1554,7 +1494,7 @@
                 emptyState.className = "name-options-empty";
                 emptyState.innerHTML = query
                     ? `<strong>${nameSearchInput.value}</strong> нэр олдсонгүй`
-                    : "Хадгалсан нэр алга. Эхний нэрийг дээрх талбараар нэмнэ үү.";
+                    : "Хайх нэрээ оруулж жагсаалтаас сонгоно уу.";
                 nameOptions.appendChild(emptyState);
                 updateNameSelectionSummary();
                 return;
@@ -1595,35 +1535,7 @@
                 text.className = "name-option-text";
                 text.textContent = name;
 
-                const actions = document.createElement("span");
-                actions.className = "name-option-actions";
-
-                const editBtn = document.createElement("button");
-                editBtn.type = "button";
-                editBtn.className = "name-option-action edit";
-                editBtn.title = "Засах";
-                editBtn.innerHTML = '<i class="fa fa-pen"></i>';
-                editBtn.addEventListener("click", function (event) {
-                    event.preventDefault();
-                    event.stopPropagation();
-                    editEmployeeName(name);
-                });
-
-                const deleteBtn = document.createElement("button");
-                deleteBtn.type = "button";
-                deleteBtn.className = "name-option-action delete";
-                deleteBtn.title = "Устгах";
-                deleteBtn.innerHTML = '<i class="fa fa-trash"></i>';
-                deleteBtn.addEventListener("click", function (event) {
-                    event.preventDefault();
-                    event.stopPropagation();
-                    deleteEmployeeName(name);
-                });
-
-                actions.appendChild(editBtn);
-                actions.appendChild(deleteBtn);
                 body.appendChild(text);
-                body.appendChild(actions);
 
                 label.appendChild(checkbox);
                 label.appendChild(body);
@@ -1639,7 +1551,10 @@
                 return;
             }
 
-            addEmployeeName(newName);
+            if (!addEmployeeName(newName)) {
+                return;
+            }
+
             if (nameSearchInput) {
                 nameSearchInput.value = "";
             }
@@ -2026,6 +1941,7 @@
         addWorkerBtn.addEventListener("click", handleAddWorker);
 
         if (addNameOptionBtn) {
+            addNameOptionBtn.title = "Шинэ нэр нэмэх боломж хаалттай";
             addNameOptionBtn.addEventListener("click", seedNameFromInput);
         }
 
