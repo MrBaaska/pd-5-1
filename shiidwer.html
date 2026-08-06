@@ -28,11 +28,18 @@
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
+        html,
+        body {
+            height: 100%;
+        }
+
         body {
             background: var(--bg);
             color: var(--text);
             font-family: 'IBM Plex Sans', sans-serif;
             min-height: 100vh;
+            overflow-y: auto;
+            overflow-x: hidden;
         }
 
         /* HEADER */
@@ -758,7 +765,8 @@
         .table-wrap {
             overflow-x: auto;
             overflow-y: auto;
-            max-height: 520px;
+            max-height: min(62vh, 720px);
+            min-height: 300px;
             border-radius: 12px;
             border: 1px solid var(--border);
         }
@@ -909,7 +917,8 @@
                 width: 100%;
             }
             .table-wrap {
-                max-height: none;
+                max-height: 56vh;
+                min-height: 260px;
             }
             .worker-list {
                 max-height: none;
