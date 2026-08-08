@@ -415,6 +415,11 @@
       color: var(--accent2);
       background: rgba(9,243,114,0.05);
     }
+    .sidebar-sub a.active {
+      color: var(--accent2);
+      background: rgba(9,243,114,0.08);
+      border-left: 2px solid var(--accent2);
+    }
 
     .sidebar-divider {
       height: 1px;
@@ -955,6 +960,12 @@
         <div class="sidebar-link"><i class="fa fa-database"></i> Судалгаа, бүртгэл</div>
         <div class="sidebar-sub">
           <a href="#" id="ajiltan-link" data-page-key="Ажилтануудын мэдээлэл">Ажилтануудын мэдээлэл</a>
+          <a href="#" data-page-key="Малтай айлын судалгаа">Малтай айлын судалгаа</a>
+          <a href="#" data-page-key="Гүүр, хоолойн судалгаа">Гүүр, хоолойн судалгаа</a>
+          <a href="#" data-page-key="ПУ-5 дэр модны судалгаа">ПУ-5 дэр модны судалгаа</a>
+          <a href="#" data-page-key="ПУ-2 зам төмрийн судалгаа">ПУ-2 зам төмрийн судалгаа</a>
+          <a href="#" data-page-key="Нөөц зам төмрийн судалгаа">Нөөц зам төмрийн судалгаа</a>
+          <a href="#" data-page-key="Уулзварын зайн судалгаа">Уулзварын зайн судалгаа</a>
           <a href="#" id="sum-link" data-page-key="Суман шилжүүлгийн бүртгэл">Суман шилжүүлгийн бүртгэл</a>
         </div>
       </div>
@@ -1152,6 +1163,12 @@
     'Үүрэг даалгавар': 'ita.html',
     'Менежментийн нэгдсэн тогтолцоо': 'anhaar.html',
     'Ажилтануудын мэдээлэл': 'ajiltan.html',
+    'Малтай айлын судалгаа': 'torZasagch.html',
+    'Гүүр, хоолойн судалгаа': 'isso.html',
+    'ПУ-5 дэр модны судалгаа': 'pu5.html',
+    'ПУ-2 зам төмрийн судалгаа': 'gemtelteiZT.html',
+    'Нөөц зам төмрийн судалгаа': 'nootsZT.html',
+    'Уулзварын зайн судалгаа': 'uZai.html',
     'Суман шилжүүлгийн бүртгэл': 'sum.html',
     'ХАБЭА-н үзлэг': 'habea.html',
     'Паспортын үзлэг': 'passport.html',
@@ -1531,14 +1548,31 @@
     document.querySelectorAll('.sidebar-link.active').forEach(function(link) {
       link.classList.remove('active');
     });
+    document.querySelectorAll('.sidebar-sub a.active').forEach(function(link) {
+      link.classList.remove('active');
+    });
     const alertLink = document.getElementById('toggle-alert');
     if (alertLink) {
       alertLink.classList.remove('active-alert');
     }
-    if (activeLink && activeLink.classList.contains('sidebar-link')) {
+
+    if (!activeLink) {
+      return;
+    }
+
+    if (activeLink.classList.contains('sidebar-link')) {
       activeLink.classList.add('active');
       if (activeLink.id === 'toggle-alert') {
         activeLink.classList.add('active-alert');
+      }
+      return;
+    }
+
+    if (activeLink.matches && activeLink.matches('.sidebar-sub a')) {
+      activeLink.classList.add('active');
+      const parentSidebarLink = activeLink.closest('.sidebar-link');
+      if (parentSidebarLink) {
+        parentSidebarLink.classList.add('active');
       }
     }
   }
@@ -1558,7 +1592,7 @@
     if (frameTitle) {
       frameTitle.textContent = titleText.toUpperCase();
     }
-    setActiveSidebarLink(clickedElement.closest('.sidebar-link'));
+    setActiveSidebarLink(clickedElement);
     closeTopNavMenus();
     if (window.matchMedia('(max-width: 1024px)').matches) {
       closeSidebar();
