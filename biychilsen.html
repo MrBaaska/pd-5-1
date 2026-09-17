@@ -540,8 +540,9 @@ tbody tr.status-zassan td:first-child {
 </div>
 
 <script>
-const SHEET_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyMf0mPRYjSj6ZJEZ_ZpQZAsLitPrGiZlVbP4GruNJT4MVS650D24Co41B81hNbz5k/exec";
-const SHEET_NAME = "pd-5";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyQCMm-2TyMvWvhLBbcpE9SAooEJURITt2nWDIsbnOnZd43Nl24m8xE3-rUaXKFXTs/exec";
+const SHEET_NAME = "pd-3";
+const SHEET_EDIT_URL = SCRIPT_URL;
 const STORAGE_KEY = "gemtliin_bugd";
 
 let allRows = [];
@@ -721,7 +722,7 @@ document.querySelectorAll(".filter-btn").forEach(btn => {
 document.getElementById("searchInput").addEventListener("input", renderRows);
 
 function normalizeCols(cols) {
-  let normalized = [...cols];
+  let normalized = cols.map(col => String(col ?? "").trim());
 
   // 13 оронтой timestamp байвал хасна.
   if (normalized[0] && /^\d{13}$/.test(normalized[0])) {
@@ -745,42 +746,23 @@ function normalizeCols(cols) {
   return normalized;
 }
 
-function normalizeScriptRow(item) {
-  if (!item || typeof item !== "object") {
-    return normalizeCols([]);
-  }
-
-  return normalizeCols([
-    item["Огноо"] ?? "",
-    item["Зам"] ?? "",
-    item["КМ"] ?? "",
-    item["ПК"] ?? "",
-    item["Үе"] ?? "",
-    item["Гэмтэл"] ?? "",
-    item["Хянасан"] ?? ""
-  ].map(value => String(value ?? "").trim()));
-}
-
-function parseScriptRows(payload) {
-  const rows = Array.isArray(payload)
-    ? payload
-    : (Array.isArray(payload?.value) ? payload.value : []);
-
-  if (!rows.length) {
-    throw new Error("pd-5 өгөгдөл хоосон байна");
-  }
-
-  return rows.map(normalizeScriptRow);
+function recordToCols(record) {
+  const values = Object.values(record || {}).filter(value => value !== undefined);
+  return normalizeCols(values);
 }
 
 async function fetchSheetRows() {
-  const response = await fetch(`${SHEET_SCRIPT_URL}?sheet=${encodeURIComponent(SHEET_NAME)}&t=${Date.now()}`, {
-    cache: "no-store"
-  });
-  if (!response.ok) throw new Error("Apps Script fetch алдаа");
+  const response = await fetch(`${SCRIPT_URL}?sheet=${encodeURIComponent(SHEET_NAME)}`, { cache: "no-store" });
+  if (!response.ok) {
+    throw new Error("Apps Script fetch алдаа");
+  }
 
   const json = await response.json();
-  return parseScriptRows(json);
+  if (!Array.isArray(json)) {
+    throw new Error("JSON өгөгдөл буруу");
+  }
+
+  return json.map(recordToCols);
 }
 
 function renderLoadError() {
@@ -789,10 +771,10 @@ function renderLoadError() {
       <div class="error-wrap">
         ⚠ Мэдээлэл ачааллахад алдаа гарлаа.<br>
         <span style="font-size:11px;opacity:0.6;margin-top:6px;display:block">
-          Apps Script холбоос болон pd-5 өгөгдлөө шалгана уу.
+          Google Sheet эрх болон холбоосоо шалгана уу.
         </span>
-        <a href="${SHEET_SCRIPT_URL}?sheet=${encodeURIComponent(SHEET_NAME)}" target="_blank" rel="noopener" style="display:inline-block;margin-top:10px;color:#7cc4ff;text-decoration:underline">
-          Өгөгдлийн эх нээх
+        <a href="${SHEET_EDIT_URL}" target="_blank" rel="noopener" style="display:inline-block;margin-top:10px;color:#7cc4ff;text-decoration:underline">
+          Sheet нээх
         </a>
       </div>
     </td></tr>`;

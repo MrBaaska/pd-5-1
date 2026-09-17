@@ -59,6 +59,52 @@
             justify-content: center;
             gap: 0.35rem;
         }
+        .tool-name-cell {
+            min-width: 16rem;
+        }
+        .tool-name-cell__content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+        }
+        .tool-name-cell__actions {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+        .tool-name-cell__action {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 1.8rem;
+            height: 1.8rem;
+            border-radius: 9999px;
+            background-color: #e2e8f0;
+            color: #334155;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+        .tool-name-cell__action:hover {
+            background-color: #cbd5e1;
+        }
+        .tool-name-cell__action--delete {
+            background-color: #fee2e2;
+            color: #dc2626;
+        }
+        .tool-name-cell__action--delete:hover {
+            background-color: #fecaca;
+        }
+        .tool-name-input {
+            width: 100%;
+            border: 1px solid #2563eb;
+            border-radius: 0.375rem;
+            padding: 0.45rem 0.6rem;
+            outline: none;
+        }
+        .number-cell__add {
+            font-weight: 600;
+            color: #2563eb;
+        }
         .number-cell__delete {
             display: inline-flex;
             align-items: center;
@@ -73,106 +119,6 @@
         }
         .number-cell__delete:hover {
             background-color: #fecaca;
-        }
-        .edit-mode-panel {
-            border: 1px solid #fdba74;
-            background: linear-gradient(180deg, #fff7ed 0%, #fffaf5 100%);
-            border-radius: 1rem;
-            padding: 1rem;
-        }
-        .edit-mode-note {
-            color: #c2410c;
-            font-weight: 600;
-            font-size: 0.875rem;
-            margin-bottom: 1rem;
-        }
-        .edit-card {
-            border: 1px solid #fed7aa;
-            background: #fff;
-            border-radius: 0.9rem;
-            padding: 1rem;
-            box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
-        }
-        .edit-card-title {
-            font-size: 0.95rem;
-            font-weight: 700;
-            color: #111827;
-            margin-bottom: 0.75rem;
-        }
-        .edit-form-row {
-            display: grid;
-            grid-template-columns: minmax(0, 1fr) auto;
-            gap: 0.5rem;
-            margin-bottom: 0.75rem;
-        }
-        .edit-input,
-        .edit-select {
-            width: 100%;
-            border: 1px solid #cbd5e1;
-            border-radius: 0.65rem;
-            padding: 0.6rem 0.75rem;
-            outline: none;
-            background: #fff;
-        }
-        .edit-input:focus,
-        .edit-select:focus {
-            border-color: #f97316;
-            box-shadow: 0 0 0 1px #f97316;
-        }
-        .edit-chip-button {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.35rem;
-            border-radius: 0.7rem;
-            padding: 0.6rem 0.85rem;
-            font-weight: 700;
-            color: #fff;
-            transition: opacity 0.15s ease, transform 0.15s ease;
-        }
-        .edit-chip-button:hover {
-            opacity: 0.96;
-            transform: translateY(-1px);
-        }
-        .edit-chip-button--primary { background: #4f46e5; }
-        .edit-chip-button--amber { background: #f59e0b; }
-        .edit-chip-button--rose { background: #e11d48; }
-        .edit-chip-button--emerald { background: #059669; }
-        .edit-row-actions {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.35rem;
-            margin-left: 0.5rem;
-        }
-        .edit-row-action {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 0.5rem;
-            padding: 0.25rem 0.5rem;
-            font-size: 0.75rem;
-            font-weight: 700;
-            line-height: 1.2;
-        }
-        .edit-row-action--name {
-            background: #ffedd5;
-            color: #d97706;
-        }
-        .edit-row-action--delete {
-            background: #fee2e2;
-            color: #dc2626;
-        }
-        .tool-empty-plus {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 1.5rem;
-            height: 1.5rem;
-            border-radius: 9999px;
-            background: #eef2ff;
-            color: #4f46e5;
-            font-weight: 700;
-            line-height: 1;
         }
         .stat-value--editable {
             cursor: text;
@@ -247,50 +193,19 @@
         </div>
 
         <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
-            <div class="flex justify-between items-center mb-4">
+            <div class="flex flex-wrap justify-between items-center gap-3 mb-4">
                 <h2 class="text-xl font-bold text-gray-800">
                     Багажны жагсаалт
                 </h2>
-                <button id="toggleEditMode" class="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">
-                    <i data-lucide="edit-2" class="icon edit-icon" data-size="18"></i>
-                    <span class="edit-text">Засах</span>
-                </button>
-            </div>
-
-            <div id="editModePanel" class="edit-mode-panel hidden mb-5">
-                <div class="edit-mode-note">Засах горим: багажны нэр болон дугаар нэмэх, засах, устгах</div>
-                <div class="grid gap-4 lg:grid-cols-2">
-                    <div class="edit-card">
-                        <div class="edit-card-title">Багажны нэр</div>
-                        <div class="edit-form-row">
-                            <input id="newToolNameInput" class="edit-input" type="text" placeholder="Шинэ багажны нэр" />
-                            <button id="createToolButton" type="button" class="edit-chip-button edit-chip-button--primary">Нэмэх</button>
-                        </div>
-                        <div class="edit-form-row">
-                            <select id="toolEditSelect" class="edit-select"></select>
-                            <input id="toolEditNameInput" class="edit-input" type="text" placeholder="Сонгосон багажны нэр" />
-                        </div>
-                        <div class="flex flex-wrap gap-2">
-                            <button id="renameToolButton" type="button" class="edit-chip-button edit-chip-button--amber">Нэр засах</button>
-                            <button id="removeToolButton" type="button" class="edit-chip-button edit-chip-button--rose">Устгах</button>
-                        </div>
-                    </div>
-
-                    <div class="edit-card">
-                        <div class="edit-card-title">Багажны дугаар</div>
-                        <div class="grid gap-2 mb-3 md:grid-cols-2">
-                            <select id="numberToolSelect" class="edit-select"></select>
-                            <select id="numberValueSelect" class="edit-select"></select>
-                        </div>
-                        <div class="edit-form-row">
-                            <input id="toolNumberInput" class="edit-input" type="text" placeholder="Шинэ дугаар" maxlength="20" />
-                            <button id="addNumberButton" type="button" class="edit-chip-button edit-chip-button--emerald">Дугаар нэмэх</button>
-                        </div>
-                        <div class="flex flex-wrap gap-2">
-                            <button id="renameNumberButton" type="button" class="edit-chip-button edit-chip-button--amber">Дугаар засах</button>
-                            <button id="removeNumberButton" type="button" class="edit-chip-button edit-chip-button--rose">Дугаар устгах</button>
-                        </div>
-                    </div>
+                <div class="flex flex-wrap items-center gap-2">
+                    <button id="addToolButton" type="button" class="hidden flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition">
+                        <i data-lucide="plus" class="icon" data-size="18"></i>
+                        <span>Багаж нэмэх</span>
+                    </button>
+                    <button id="toggleEditMode" class="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">
+                        <i data-lucide="edit-2" class="icon edit-icon" data-size="18"></i>
+                        <span class="edit-text">Засах</span>
+                    </button>
                 </div>
             </div>
 
@@ -341,6 +256,7 @@
         let isEditingUsageTotal = false;
         let editMode = false;
         let editingCellKey = null;
+        let editingToolNameId = null;
         let selectedRegistrantName = '';
         let html5QrCode = null;
         let qrScanInProgress = false;
@@ -350,12 +266,13 @@
         const SHEET_ID = '1YrGzepKEZ70eZBj9Rxshu0amfhtbDY6vYyo1x5jbx_s';
         const SHEET_GID = '0';
         const SHEET_CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${SHEET_GID}`;
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyWCI6xEW3Hpzc05rAiLO_5d7n34HYK2NmcIdxrKs_EThl_4EOWfHAVtXlVRmYyMkYe/exec';
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzEZ28txc51rzR74sh8f7Yrl5-__uL1JYOE2KkbSiknfp_vUx-m4Ku_YQzkkaiW8xx9/exec';
         const FALLBACK_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxZV214_EA2YvQtNh2rYFQOaWj7JMt9BkvEw7pn1L7BlTw7_iWTyWZrVkxHIntNHgZQ/exec';
-        const PD1_SHEET_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyWCI6xEW3Hpzc05rAiLO_5d7n34HYK2NmcIdxrKs_EThl_4EOWfHAVtXlVRmYyMkYe/exec';
+        const PD3_SHEET_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyWCI6xEW3Hpzc05rAiLO_5d7n34HYK2NmcIdxrKs_EThl_4EOWfHAVtXlVRmYyMkYe/exec';
         const KNOWN_TOOL_ACTIONS = [
             'Ажилд ашиглах',
             'Засварт өгсөн',
+            'Томилолт',
             'Томилолтонд явуулсан',
             'Стандарт бус',
             'Бусад'
@@ -369,6 +286,7 @@
         const SHEETS_SYNC_EVENT_TYPE = 'hatyy_usage';
         const SHEETS_POLL_INTERVAL_MS = 5000;
         const CURRENT_USAGE_SESSION_GAP_MS = 60 * 60 * 1000;
+        const PD3_SNAPSHOT_SCHEMA_VERSION = 'pd3-v2';
         let sheetsPollTimer = null;
         let isFetchingSheetState = false;
         let lastAppliedSheetVersion = '';
@@ -444,7 +362,6 @@
 
         function getAvailableCountByTool(tool, activeUsageKeys) {
             return tool.numbers.filter((number, idx) => {
-                if (!String(number || '').trim()) return false;
                 const key = `${tool.id}-${idx}`;
                 if (removedItems[key]) return false;
                 const usageKey = `${tool.name}||${number}`;
@@ -458,6 +375,31 @@
 
         function isDuplicateNumber(tool, candidateNumber, currentIndex) {
             return tool.numbers.some((number, idx) => idx !== currentIndex && number === candidateNumber);
+        }
+
+        function isDuplicateToolName(candidateName, currentToolId) {
+            return tools.some(tool => tool.id !== currentToolId && tool.name === candidateName);
+        }
+
+        function getNextToolId() {
+            return tools.reduce((maxId, tool) => Math.max(maxId, Number(tool.id) || 0), 0) + 1;
+        }
+
+        function syncEditedToolNameReferences(oldName, newName) {
+            usageData.forEach(entry => {
+                if (entry.name === oldName) {
+                    entry.name = newName;
+                }
+            });
+        }
+
+        function removeToolUsageReferences(toolName) {
+            usageData = usageData.map(entry => {
+                if (entry.name === toolName && !entry.deleted) {
+                    return { ...entry, deleted: true };
+                }
+                return entry;
+            });
         }
 
         function syncEditedNumberReferences(tool, oldNumber, newNumber) {
@@ -485,244 +427,6 @@
                 }
                 return entry;
             });
-        }
-
-        function escapeHtml(value) {
-            return String(value == null ? '' : value)
-                .replace(/&/g, '&amp;')
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;')
-                .replace(/"/g, '&quot;')
-                .replace(/'/g, '&#39;');
-        }
-
-        function getFilledToolNumbers(tool) {
-            return Array.isArray(tool?.numbers)
-                ? tool.numbers.filter(number => String(number || '').trim())
-                : [];
-        }
-
-        function isToolEmpty(tool) {
-            return getFilledToolNumbers(tool).length === 0;
-        }
-
-        function nextToolId() {
-            return tools.reduce((maxId, tool) => Math.max(maxId, Number(tool.id) || 0), 0) + 1;
-        }
-
-        function addToolWithName(toolName = '') {
-            const name = String(toolName).trim();
-            if (!name) {
-                alert('Багажны нэр оруулна уу.');
-                return false;
-            }
-
-            if (tools.some(tool => tool.name === name)) {
-                alert('Ижил нэртэй багаж аль хэдийн байна.');
-                return false;
-            }
-
-            tools.push({ id: nextToolId(), name, numbers: [] });
-            saveState();
-            updateUI();
-            return true;
-        }
-
-        function renameTool(toolId, nextName) {
-            const tool = getToolById(toolId);
-            if (!tool) {
-                return false;
-            }
-
-            const trimmedName = String(nextName || '').trim();
-            if (!trimmedName) {
-                alert('Багажны нэр хоосон байж болохгүй.');
-                return false;
-            }
-
-            if (tools.some(item => item.id !== toolId && item.name === trimmedName)) {
-                alert('Ижил нэртэй багаж аль хэдийн байна.');
-                return false;
-            }
-
-            const oldName = tool.name;
-            if (oldName === trimmedName) {
-                return true;
-            }
-
-            tool.name = trimmedName;
-            usageData.forEach(entry => {
-                if (entry.name === oldName) {
-                    entry.name = trimmedName;
-                }
-            });
-            saveState();
-            updateUI();
-            return true;
-        }
-
-        function deleteToolById(toolId) {
-            const toolIndex = tools.findIndex(item => item.id === toolId);
-            if (toolIndex === -1) {
-                return false;
-            }
-
-            const tool = tools[toolIndex];
-            if (!window.confirm(`"${tool.name}" багажийг устгах уу?`)) {
-                return false;
-            }
-
-            usageData = usageData.filter(entry => entry.name !== tool.name);
-            tools.splice(toolIndex, 1);
-            editingCellKey = null;
-            saveState();
-            updateUI();
-            return true;
-        }
-
-        function addNumberToTool(toolId, numberValue = '') {
-            const tool = getToolById(toolId);
-            if (!tool) {
-                return false;
-            }
-
-            tool.numbers.push(String(numberValue || '').trim());
-            saveState();
-            updateUI();
-            return true;
-        }
-
-        function updateToolNumber(toolId, oldNumber, nextNumber) {
-            const tool = getToolById(toolId);
-            if (!tool) {
-                return false;
-            }
-
-            const trimmedNextNumber = String(nextNumber || '').trim();
-            if (!trimmedNextNumber) {
-                alert('Дугаар хоосон байж болохгүй.');
-                return false;
-            }
-
-            const targetIndex = tool.numbers.findIndex(number => number === oldNumber);
-            if (targetIndex === -1) {
-                return false;
-            }
-
-            if (tool.numbers.some((number, idx) => idx !== targetIndex && number === trimmedNextNumber)) {
-                alert('Ижил багаж дээр давхардсан дугаар оруулах боломжгүй.');
-                return false;
-            }
-
-            tool.numbers[targetIndex] = trimmedNextNumber;
-            syncEditedNumberReferences(tool, oldNumber, trimmedNextNumber);
-            saveState();
-            updateUI();
-            return true;
-        }
-
-        function deleteToolNumber(toolId, numberValue) {
-            const tool = getToolById(toolId);
-            if (!tool) {
-                return false;
-            }
-
-            const numberIndex = tool.numbers.indexOf(numberValue);
-            if (numberIndex === -1) {
-                return false;
-            }
-
-            tool.numbers.splice(numberIndex, 1);
-            removeEditedNumberReferences(tool, numberValue);
-            saveState();
-            updateUI();
-            return true;
-        }
-
-        function fillSelect(selectEl, placeholder, options, selectedValue = '') {
-            if (!selectEl) {
-                return;
-            }
-
-            selectEl.innerHTML = '';
-            const placeholderOption = document.createElement('option');
-            placeholderOption.value = '';
-            placeholderOption.textContent = placeholder;
-            selectEl.appendChild(placeholderOption);
-
-            options.forEach(optionValue => {
-                const option = document.createElement('option');
-                option.value = optionValue;
-                option.textContent = optionValue;
-                selectEl.appendChild(option);
-            });
-
-            if ([...selectEl.options].some(option => option.value === selectedValue)) {
-                selectEl.value = selectedValue;
-            } else {
-                selectEl.value = '';
-            }
-        }
-
-        function getToolByName(name) {
-            return tools.find(tool => tool.name === name);
-        }
-
-        function populateEditToolPanel() {
-            const editToolSelect = document.getElementById('toolEditSelect');
-            const editToolNameInput = document.getElementById('toolEditNameInput');
-            const numberToolSelect = document.getElementById('numberToolSelect');
-            const numberValueSelect = document.getElementById('numberValueSelect');
-
-            const toolNames = tools.map(tool => tool.name);
-            const currentToolName = editToolSelect?.value || '';
-            const currentNumberToolName = numberToolSelect?.value || '';
-
-            fillSelect(editToolSelect, 'Багаж сонгох', toolNames, currentToolName);
-            fillSelect(numberToolSelect, 'Багаж сонгох', toolNames, currentNumberToolName);
-
-            const selectedToolForName = getToolByName(editToolSelect?.value || '');
-            if (editToolNameInput) {
-                editToolNameInput.value = selectedToolForName ? selectedToolForName.name : '';
-            }
-
-            const selectedToolForNumber = getToolByName(numberToolSelect?.value || '');
-            const numberOptions = selectedToolForNumber
-                ? selectedToolForNumber.numbers.filter(number => String(number || '').trim())
-                : [];
-            const currentNumber = numberValueSelect?.value || '';
-            fillSelect(numberValueSelect, 'Дугаар сонгох', numberOptions, currentNumber);
-
-            const toolNumberInput = document.getElementById('toolNumberInput');
-            if (toolNumberInput && numberValueSelect?.value) {
-                toolNumberInput.value = numberValueSelect.value;
-            }
-        }
-
-        function syncEditPanelVisibility() {
-            const editModePanel = document.getElementById('editModePanel');
-            if (editModePanel) {
-                editModePanel.classList.toggle('hidden', !editMode);
-            }
-
-            if (editMode) {
-                populateEditToolPanel();
-            }
-        }
-
-        function selectToolForNameEdit(toolId) {
-            const tool = getToolById(toolId);
-            if (!tool) {
-                return;
-            }
-
-            const editToolSelect = document.getElementById('toolEditSelect');
-            const editToolNameInput = document.getElementById('toolEditNameInput');
-            if (editToolSelect) editToolSelect.value = tool.name;
-            if (editToolNameInput) editToolNameInput.value = tool.name;
-            syncEditPanelVisibility();
-            editToolNameInput?.focus();
-            editToolNameInput?.select();
         }
 
         function setRemovedItemState(toolId, numIdx, isRemoved) {
@@ -759,6 +463,7 @@
         const usageHistoryTabButton = document.getElementById('usageHistoryTab');
         const usageLogPanel = document.getElementById('usageLogPanel');
         const usageHistoryPanel = document.getElementById('usageHistoryPanel');
+        const addToolButton = document.getElementById('addToolButton');
 
         // ===================================
         // 1. Local Storage-ийн функцууд
@@ -932,6 +637,7 @@
             }, 0);
 
             return [
+                PD3_SNAPSHOT_SCHEMA_VERSION,
                 String(record.savedAt || ''),
                 String(record.eventId || ''),
                 String(latestUsageTimestamp),
@@ -1081,6 +787,23 @@
             return '';
         }
 
+        function isPd3SheetRecord(record) {
+            if (!record || typeof record !== 'object') {
+                return false;
+            }
+
+            const keySet = new Set(Object.keys(record).map(normalizeRecordKey));
+            const expectedKeys = [
+                'бүртгэсэногноо',
+                'ажилтнынэр',
+                'танилцсан',
+                'зааварчилгаанынэр',
+                'зааварчилгааөгсөн'
+            ];
+
+            return expectedKeys.filter(key => keySet.has(key)).length >= 3;
+        }
+
         function normalizePd1SheetRecord(record, rowIndex) {
             if (!record || typeof record !== 'object') {
                 return null;
@@ -1113,32 +836,38 @@
 
             const fallbackValueAt = index => orderedValues[index] != null ? orderedValues[index] : '';
             const rawDate = getRecordField(record, ['savedAt', 'SavedAt', 'date', 'Date', 'огноо', 'Огноо', 'timestamp'])
+                || getRecordField(record, ['Бүртгэсэн огноо', 'Бүртгэсэн Огноо', 'Зааварчилгааны огноо', 'Зааварчилгааны Огноо'])
                 || (latestParsedDateCandidate ? latestParsedDateCandidate.value : '')
                 || fallbackValueAt(0);
             const rawName = getRecordField(record, ['name', 'Name', 'нэр', 'Нэр', 'toolName', 'Багажны нэр'])
+                || getRecordField(record, ['Ажилтны нэр', 'Ажилтын нэр', 'Багажны нэр'])
                 || detectedToolName
                 || fallbackValueAt(1)
                 || fallbackValueAt(0);
             const rawNumber = getRecordField(record, ['number', 'Number', 'дугаар', 'Дугаар', 'toolNumber'])
+                || getRecordField(record, ['Танилцсан', 'Танилцуулсан', 'Serial', 'Сери'])
                 || numericCandidatesBeforeDate[0]
                 || fallbackValueAt(2)
                 || '';
             const rawAction = getRecordField(record, ['toolAction', 'ToolAction', 'action', 'Action', 'зорилго', 'Зорилго'])
+                || getRecordField(record, ['Зааварчилгааны нэр', 'Зааварчилгааны Нэр'])
                 || detectedAction
                 || 'Ажилд ашиглах';
             const rawComment = getRecordField(record, ['comment', 'Comment', 'тайлбар', 'Тайлбар'])
+                || getRecordField(record, ['Зааварчилгаа өгсөн', 'Зааварчилгаа Өгсөн'])
                 || (detectedAction
                     ? (normalizedOrderedValues[normalizedOrderedValues.indexOf(detectedAction) + 1] || '')
                     : '')
                 || '';
             const rawRegistrant = getRecordField(record, ['registrant', 'Registrant', 'бүртгэл', 'Бүртгэл', 'registeredBy'])
+                || getRecordField(record, ['Зааварчилгааны огноо', 'Зааварчилгааны Огноо'])
                 || '';
 
             const parsedTimestamp = Date.parse(String(rawDate || ''));
             const rowNumber = Number(record.rowNumber || rowIndex + 1);
 
             return {
-                id: `pd1-${rowNumber}-${String(rawDate || Date.now())}`,
+                id: `pd3-${rowNumber}-${String(rawDate || Date.now())}`,
                 name: String(rawName || 'Тодорхойгүй').trim(),
                 number: String(rawNumber || '-').trim() || '-',
                 action: String(rawAction || 'Ажилд ашиглах').trim() || 'Ажилд ашиглах',
@@ -1147,7 +876,7 @@
                 date: String(rawDate || 'Огноо тодорхойгүй').trim() || 'Огноо тодорхойгүй',
                 timestamp: Number.isNaN(parsedTimestamp) ? rowNumber : parsedTimestamp,
                 deleted: false,
-                source: 'pd-1-sheet',
+                source: 'pd-3-sheet',
                 rawRecord: record,
                 rawColumns,
                 rawValues: Object.values(record)
@@ -1158,6 +887,10 @@
             const rows = Array.isArray(payload)
                 ? payload
                 : (Array.isArray(payload?.rows) ? payload.rows : (Array.isArray(payload?.data) ? payload.data : []));
+
+            if (!rows.length || !rows.some(isPd3SheetRecord)) {
+                return null;
+            }
 
             const usageRows = rows
                 .map((row, rowIndex) => normalizePd1SheetRecord(row, rowIndex))
@@ -1170,7 +903,7 @@
 
             return {
                 record: {
-                    source: 'pd-1-sheet',
+                    source: 'pd-3-sheet',
                     savedAt: usageRows[0].date || ''
                 },
                 snapshot: {
@@ -1393,11 +1126,11 @@
             setSyncStatus('Мэдээлэл татаж байна...', 'loading');
 
             try {
-                const result = await fetchJsonFromUrl(`${PD1_SHEET_SCRIPT_URL}?sheet=pd-5&t=${Date.now()}`);
+                const result = await fetchJsonFromUrl(`${PD3_SHEET_SCRIPT_URL}?sheet=pd-3&t=${Date.now()}`);
                 const normalizedSnapshot = buildSnapshotFromPd1Json(result);
 
                 if (!normalizedSnapshot) {
-                    setSyncStatus('pd-5 шитнээс ашиглах мөр олдсонгүй.', 'warning');
+                    setSyncStatus('pd-3 шитнээс ашиглах мөр олдсонгүй.', 'warning');
                     return false;
                 }
 
@@ -1536,6 +1269,15 @@
             }
         }
 
+        function escapeHtml(value) {
+            return String(value)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
         function formatDisplayDate(value) {
             if (!value) {
                 return '-';
@@ -1672,13 +1414,13 @@
 
         function calculateTotal() {
             return tools.reduce((total, tool) => {
-                return total + tool.numbers.filter((number, idx) => String(number || '').trim() && !removedItems[`${tool.id}-${idx}`]).length;
+                return total + tool.numbers.filter((_, idx) => !removedItems[`${tool.id}-${idx}`]).length;
             }, 0);
         }
 
         function calculateTotalFromState(stateTools, stateRemovedItems) {
             return stateTools.reduce((total, tool) => {
-                return total + tool.numbers.filter((number, idx) => String(number || '').trim() && !stateRemovedItems[`${tool.id}-${idx}`]).length;
+                return total + tool.numbers.filter((_, idx) => !stateRemovedItems[`${tool.id}-${idx}`]).length;
             }, 0);
         }
 
@@ -1740,7 +1482,7 @@
             const thead = document.getElementById('toolsTableHeader');
             tbody.innerHTML = '';
             const activeUsageKeys = getActiveUsageKeySet();
-            const maxColumns = Math.max(1, ...tools.map(tool => Math.max(tool.numbers.length, 1)));
+            const maxColumns = Math.max(10, ...tools.map(tool => tool.numbers.length));
 
             // Толгой хэсэг (Header)
             thead.innerHTML = `
@@ -1760,78 +1502,71 @@
                 tr.className = "hover:bg-gray-50";
 
                 const count = getAvailableCountByTool(tool, activeUsageKeys);
-                const nameCellContent = editMode
-                    ? `
-                        <div class="flex flex-wrap items-center gap-2">
-                            <span class="font-medium">${escapeHtml(tool.name)}</span>
-                            <span class="edit-row-actions">
-                                <button type="button" class="edit-row-action edit-row-action--name" onclick="selectToolForNameEdit(${tool.id})">Нэр</button>
-                                <button type="button" class="edit-row-action edit-row-action--delete" onclick="deleteToolById(${tool.id})">Устгах</button>
-                            </span>
-                        </div>
-                    `
-                    : escapeHtml(tool.name);
+                const isEditingToolName = editingToolNameId === tool.id;
 
                 let rowHTML = `
                     <td class="border border-gray-300 p-3 text-center">${tool.id}</td>
-                    <td class="border border-gray-300 p-3 font-medium">${nameCellContent}</td>
+                    <td class="border border-gray-300 p-3 font-medium tool-name-cell">
+                        ${isEditingToolName ? `
+                            <input type="text" class="tool-name-input" value="${tool.name || ''}" maxlength="80" data-tool-name-input="${tool.id}" />
+                        ` : `
+                            <div class="tool-name-cell__content">
+                                <span>${tool.name || ''}</span>
+                                ${ALLOW_MANUAL_NUMBER_EDIT && editMode ? `
+                                    <span class="tool-name-cell__actions">
+                                        <button type="button" class="tool-name-cell__action" onclick="startToolNameEdit(${tool.id}, event)" title="Нэр засах">
+                                            <i data-lucide="pencil" class="icon" data-size="14"></i>
+                                        </button>
+                                        <button type="button" class="tool-name-cell__action tool-name-cell__action--delete" onclick="deleteTool(${tool.id}, event)" title="Мөр устгах">
+                                            <i data-lucide="trash-2" class="icon" data-size="14"></i>
+                                        </button>
+                                    </span>
+                                ` : ''}
+                            </div>
+                        `}
+                    </td>
                 `;
 
-                if (editMode && isToolEmpty(tool)) {
+                // Дугаарын нүднүүд (Number Cells)
+                for (let idx = 0; idx < maxColumns; idx++) {
+                    const number = tool.numbers[idx];
+                    const key = `${tool.id}-${idx}`;
+                    const isRemoved = removedItems[key];
+                    const usageKey = `${tool.name}||${number}`;
+                    const isInUse = number && activeUsageKeys.has(usageKey) && !isRemoved;
+                    const classes = ['border', 'border-gray-300', 'p-3', 'text-center', 'number-cell'];
+                    const isEditing = editingCellKey === key;
+                    const canEdit = ALLOW_MANUAL_NUMBER_EDIT && editMode && (!number || !isRemoved);
+                    if (canEdit) {
+                        classes.push('cursor-pointer', 'number-cell--editable');
+                    }
+                    if (!number) {
+                        classes.push('number-cell--empty');
+                    }
+                    if (isRemoved) {
+                        classes.push('number-cell--removed');
+                    }
+                    if (isInUse) {
+                        classes.push('number-cell--in-use');
+                    }
+                    if (isEditing) {
+                        classes.push('number-cell--editing');
+                    }
                     rowHTML += `
-                        <td class="border border-gray-300 p-3 text-center text-slate-400" colspan="${maxColumns}">
-                            <button type="button" class="tool-empty-plus" onclick="addNumberToTool(${tool.id}, '')">+</button>
+                        <td 
+                            class="${classes.join(' ')}"
+                            data-tool-id="${tool.id}"
+                            data-number-idx="${idx}"
+                            ${canEdit ? `onclick="startNumberEdit(${tool.id}, ${idx})"` : ''}
+                        >
+                            ${isEditing ? `<input type="text" class="number-input" value="${number || ''}" maxlength="20" data-edit-input="${key}" />` : `
+                                <div class="number-cell__content">
+                                    <span class="${!number && canEdit ? 'number-cell__add' : ''}">${number || (canEdit ? '+ Дугаар' : '')}</span>
+                                    ${ALLOW_MANUAL_NUMBER_EDIT && editMode && number && !isRemoved ? `<button type="button" class="number-cell__delete" onclick="deleteNumber(${tool.id}, ${idx}, event)">x</button>` : ''}
+                                </div>
+                            `}
                         </td>
                     `;
-                } else {
-                    for (let idx = 0; idx < maxColumns; idx++) {
-                        const number = tool.numbers[idx];
-                        const key = `${tool.id}-${idx}`;
-                        const isRemoved = removedItems[key];
-                        const usageKey = `${tool.name}||${number}`;
-                        const isInUse = number && activeUsageKeys.has(usageKey) && !isRemoved;
-                        const classes = ['border', 'border-gray-300', 'p-3', 'text-center', 'number-cell'];
-                        const isEditing = editingCellKey === key;
-                        const canEdit = ALLOW_MANUAL_NUMBER_EDIT && editMode && (!number || !isRemoved);
-                        if (canEdit) {
-                            classes.push('cursor-pointer', 'number-cell--editable');
-                        }
-                        if (!number) {
-                            classes.push('number-cell--empty');
-                        }
-                        if (isRemoved) {
-                            classes.push('number-cell--removed');
-                        }
-                        if (isInUse) {
-                            classes.push('number-cell--in-use');
-                        }
-                        if (isEditing) {
-                            classes.push('number-cell--editing');
-                        }
-                        rowHTML += `
-                            <td 
-                                class="${classes.join(' ')}"
-                                data-tool-id="${tool.id}"
-                                data-number-idx="${idx}"
-                                ${canEdit ? `onclick="startNumberEdit(${tool.id}, ${idx})"` : ''}
-                            >
-                                ${isEditing ? `<input type="text" class="number-input" value="${escapeHtml(number || '')}" maxlength="20" data-edit-input="${key}" />` : `
-                                    <div class="number-cell__content">
-                                        <span>${escapeHtml(number || '')}</span>
-                                        ${ALLOW_MANUAL_NUMBER_EDIT && editMode && number && !isRemoved ? `<button type="button" class="number-cell__delete" onclick="deleteNumber(${tool.id}, ${idx}, event)">x</button>` : ''}
-                                    </div>
-                                `}
-                            </td>
-                        `;
-                    }
-
-                    if (editMode && tool.numbers.length < maxColumns) {
-                        rowHTML += `
-                            <td class="border border-gray-300 p-3 text-center" colspan="${maxColumns - tool.numbers.length}">
-                                <button type="button" class="tool-empty-plus" onclick="addNumberToTool(${tool.id}, '')">+</button>
-                            </td>
-                        `;
-                    }
                 }
 
                 // Тоо (Count)
@@ -1861,6 +1596,7 @@
             // Lucide icons-ийг шинэчлэх
             lucide.createIcons();
             attachEditableCellInteractions();
+            attachEditableToolNameInteractions();
         }
 
         function attachEditableCellInteractions() {
@@ -1905,6 +1641,112 @@
                     commitNumberEdit();
                 }
             });
+        }
+
+        function attachEditableToolNameInteractions() {
+            if (!editingToolNameId) {
+                return;
+            }
+
+            const input = document.querySelector(`[data-tool-name-input="${editingToolNameId}"]`);
+            if (!input) {
+                return;
+            }
+
+            input.focus();
+            input.select();
+            input.addEventListener('click', event => event.stopPropagation());
+            input.addEventListener('dblclick', event => event.stopPropagation());
+            input.addEventListener('keydown', event => {
+                if (event.key === 'Enter') {
+                    commitToolNameEdit();
+                }
+                if (event.key === 'Escape') {
+                    cancelToolNameEdit();
+                }
+            });
+            input.addEventListener('blur', () => {
+                if (editingToolNameId) {
+                    commitToolNameEdit();
+                }
+            });
+        }
+
+        window.startToolNameEdit = (toolId, event) => {
+            event?.stopPropagation();
+            if (!ALLOW_MANUAL_NUMBER_EDIT || !editMode) return;
+
+            if (editingCellKey) {
+                commitNumberEdit();
+            }
+
+            if (editingToolNameId && editingToolNameId !== toolId) {
+                commitToolNameEdit();
+            }
+
+            editingToolNameId = toolId;
+            renderToolsTable();
+        };
+
+        function cancelToolNameEdit() {
+            if (!editingToolNameId) {
+                return;
+            }
+
+            const tool = getToolById(editingToolNameId);
+            if (tool && /^Шинэ багаж \d+$/.test(tool.name) && tool.numbers.length === 0) {
+                tools = tools.filter(item => item.id !== tool.id);
+                editingToolNameId = null;
+                saveState();
+                updateUI();
+                return;
+            }
+
+            editingToolNameId = null;
+            renderToolsTable();
+        }
+
+        function commitToolNameEdit() {
+            if (!editingToolNameId) {
+                return;
+            }
+
+            const toolId = editingToolNameId;
+            const input = document.querySelector(`[data-tool-name-input="${toolId}"]`);
+            const nextName = input ? input.value.trim() : '';
+            const tool = getToolById(toolId);
+            const oldName = tool?.name || '';
+
+            editingToolNameId = null;
+
+            if (!tool) {
+                renderToolsTable();
+                return;
+            }
+
+            if (!nextName) {
+                alert('Багажны нэр хоосон байж болохгүй.');
+                editingToolNameId = toolId;
+                renderToolsTable();
+                return;
+            }
+
+            if (isDuplicateToolName(nextName, toolId)) {
+                alert('Ижил нэртэй багаж давхардах боломжгүй.');
+                editingToolNameId = toolId;
+                renderToolsTable();
+                return;
+            }
+
+            if (nextName === oldName) {
+                renderToolsTable();
+                return;
+            }
+
+            tool.name = nextName;
+            syncEditedToolNameReferences(oldName, nextName);
+            saveState();
+            updateUI();
         }
 
         window.startNumberEdit = (toolId, numIdx) => {
@@ -2002,6 +1844,59 @@
             updateUI();
         };
 
+        window.deleteTool = (toolId, event) => {
+            event?.stopPropagation();
+            if (!ALLOW_MANUAL_NUMBER_EDIT || !editMode) return;
+
+            const tool = getToolById(toolId);
+            if (!tool) {
+                return;
+            }
+
+            const confirmed = window.confirm(`"${tool.name}" багажийг устгах уу? Холбогдсон идэвхтэй бүртгэлүүд хаагдана.`);
+            if (!confirmed) {
+                return;
+            }
+
+            removeToolUsageReferences(tool.name);
+            Object.keys(removedItems).forEach(key => {
+                if (key.startsWith(`${toolId}-`)) {
+                    delete removedItems[key];
+                }
+            });
+            tools = tools.filter(item => item.id !== toolId);
+            if (editingToolNameId === toolId) {
+                editingToolNameId = null;
+            }
+            saveState();
+            updateUI();
+        };
+
+        function addTool() {
+            if (!ALLOW_MANUAL_NUMBER_EDIT || !editMode) {
+                return;
+            }
+
+            if (editingCellKey) {
+                commitNumberEdit();
+            }
+            if (editingToolNameId) {
+                commitToolNameEdit();
+            }
+
+            const nextId = getNextToolId();
+            const newTool = {
+                id: nextId,
+                name: `Шинэ багаж ${nextId}`,
+                numbers: []
+            };
+
+            tools.push(newTool);
+            editingToolNameId = nextId;
+            saveState();
+            updateUI();
+        }
+
         // Ашиглалтын бүртгэлийг зурах
         function renderUsageTable() {
             const tbody = document.getElementById('usageTableBody');
@@ -2028,11 +1923,16 @@
 
         // Багажийн нэрийг select-д оруулах
         function populateToolNames() {
-            const toolNames = tools.map(tool => tool.name);
-
-            fillSelect(toolNameSelect, 'Багажийн нэр', toolNames, toolNameSelect?.value || '');
-            fillSelect(document.getElementById('toolEditSelect'), 'Багаж сонгох', toolNames, document.getElementById('toolEditSelect')?.value || '');
-            fillSelect(document.getElementById('numberToolSelect'), 'Багаж сонгох', toolNames, document.getElementById('numberToolSelect')?.value || '');
+            if (!toolNameSelect) {
+                return;
+            }
+            toolNameSelect.innerHTML = '<option value="">Багажийн нэр</option>';
+            tools.forEach(tool => {
+                const option = document.createElement('option');
+                option.value = tool.name;
+                option.textContent = tool.name;
+                toolNameSelect.appendChild(option);
+            });
         }
 
         // Сонгогдсон нэр дээр үндэслэн дугаарыг select-д оруулах
@@ -2041,7 +1941,7 @@
                 return;
             }
             const selectedName = toolNameSelect.value;
-            fillSelect(toolNumberSelect, 'Дугаар', [], toolNumberSelect.value || '');
+            toolNumberSelect.innerHTML = '<option value="">Дугаар</option>';
             toolNumberSelect.disabled = !selectedName;
             addUsageButton.disabled = DISPLAY_ONLY || !toolNameSelect.value || !toolNumberSelect.value;
 
@@ -2067,28 +1967,6 @@
                 toolNumberSelect.value = '';
             }
             addUsageButton.disabled = DISPLAY_ONLY || !toolNameSelect.value || !toolNumberSelect.value;
-
-            const numberToolSelect = document.getElementById('numberToolSelect');
-            const numberValueSelect = document.getElementById('numberValueSelect');
-            const toolNumberInput = document.getElementById('toolNumberInput');
-            if (numberToolSelect) {
-                const selectedNumberTool = getToolByName(numberToolSelect.value || '');
-                const numberOptions = selectedNumberTool
-                    ? selectedNumberTool.numbers.filter(number => String(number || '').trim())
-                    : [];
-                fillSelect(numberValueSelect, 'Дугаар сонгох', numberOptions, numberValueSelect?.value || '');
-                if (toolNumberInput && numberValueSelect?.value) {
-                    toolNumberInput.value = numberValueSelect.value;
-                }
-            }
-        }
-
-        function refreshEditPanel() {
-            if (!editMode) {
-                return;
-            }
-
-            populateEditToolPanel();
         }
         
         // UI-г бүрэн шинэчлэх
@@ -2099,7 +1977,6 @@
             updateStats();
             populateToolNames();
             populateToolNumbers(); // Энэ нь disable-ийг хянана
-            refreshEditPanel();
         }
 
         function renderUsageHistory() {
@@ -2290,6 +2167,7 @@
             }
 
             editButton.classList.remove('hidden');
+            addToolButton?.classList.toggle('hidden', !editMode);
 
             if (editMode) {
                 editIcon.setAttribute('data-lucide', 'save');
@@ -2302,80 +2180,8 @@
                 editButton.classList.remove('bg-orange-600', 'hover:bg-orange-700');
                 editButton.classList.add('bg-indigo-600', 'hover:bg-indigo-700');
             }
-            syncEditPanelVisibility();
             lucide.createIcons();
         }
-
-        document.getElementById('createToolButton')?.addEventListener('click', () => {
-            const input = document.getElementById('newToolNameInput');
-            if (input && addToolWithName(input.value)) {
-                input.value = '';
-            }
-        });
-
-        document.getElementById('toolEditSelect')?.addEventListener('change', event => {
-            const tool = getToolByName(event.target.value);
-            document.getElementById('toolEditNameInput').value = tool ? tool.name : '';
-        });
-
-        document.getElementById('renameToolButton')?.addEventListener('click', () => {
-            const select = document.getElementById('toolEditSelect');
-            const input = document.getElementById('toolEditNameInput');
-            if (select && input) {
-                renameTool(getToolByName(select.value)?.id, input.value);
-            }
-        });
-
-        document.getElementById('removeToolButton')?.addEventListener('click', () => {
-            const select = document.getElementById('toolEditSelect');
-            if (select) {
-                deleteToolById(getToolByName(select.value)?.id);
-            }
-        });
-
-        document.getElementById('numberToolSelect')?.addEventListener('change', event => {
-            const tool = getToolByName(event.target.value);
-            const numberValueSelect = document.getElementById('numberValueSelect');
-            const toolNumberInput = document.getElementById('toolNumberInput');
-            const numberOptions = tool ? tool.numbers.filter(number => String(number || '').trim()) : [];
-            fillSelect(numberValueSelect, 'Дугаар сонгох', numberOptions, '');
-            if (toolNumberInput) toolNumberInput.value = '';
-        });
-
-        document.getElementById('numberValueSelect')?.addEventListener('change', event => {
-            const input = document.getElementById('toolNumberInput');
-            if (input) input.value = event.target.value || '';
-        });
-
-        document.getElementById('addNumberButton')?.addEventListener('click', () => {
-            const toolSelect = document.getElementById('numberToolSelect');
-            const input = document.getElementById('toolNumberInput');
-            const tool = getToolByName(toolSelect?.value || '');
-            if (tool && input) {
-                addNumberToTool(tool.id, input.value);
-                input.value = '';
-                populateEditToolPanel();
-            }
-        });
-
-        document.getElementById('renameNumberButton')?.addEventListener('click', () => {
-            const toolSelect = document.getElementById('numberToolSelect');
-            const numberSelect = document.getElementById('numberValueSelect');
-            const input = document.getElementById('toolNumberInput');
-            const tool = getToolByName(toolSelect?.value || '');
-            if (tool && numberSelect && input) {
-                updateToolNumber(tool.id, numberSelect.value, input.value);
-            }
-        });
-
-        document.getElementById('removeNumberButton')?.addEventListener('click', () => {
-            const toolSelect = document.getElementById('numberToolSelect');
-            const numberSelect = document.getElementById('numberValueSelect');
-            const tool = getToolByName(toolSelect?.value || '');
-            if (tool && numberSelect) {
-                deleteToolNumber(tool.id, numberSelect.value);
-            }
-        });
 
         editButton.addEventListener('click', () => {
             if (!ALLOW_MANUAL_NUMBER_EDIT) {
@@ -2385,11 +2191,14 @@
             if (editingCellKey) {
                 commitNumberEdit();
             }
+            if (editingToolNameId) {
+                commitToolNameEdit();
+            }
             editMode = !editMode;
             updateEditButton();
             renderToolsTable(); // Засах горимоос хамаарч cell-ийн double click-ийг идэвхжүүлнэ
-            refreshEditPanel();
         });
+        addToolButton?.addEventListener('click', addTool);
 
 
         // Формд өөрчлөлт орохыг хянах

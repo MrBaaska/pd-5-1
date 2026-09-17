@@ -1113,10 +1113,6 @@
                 <div class="worker-form">
                     <input type="text" id="job" placeholder="Ажлын нэр">
                     <div class="name-selector">
-                        <div class="name-selector-head">
-                            <input type="text" id="nameSearch" placeholder="Нэр шүүж хайх">
-                            <button type="button" id="addNameOption">Сонгох</button>
-                        </div>
                         <div class="name-selector-meta">
                             <span>Товшиж сонгох</span>
                             <span id="nameSelectionSummary" class="name-selector-summary">0 сонгогдсон</span>
@@ -1136,20 +1132,19 @@
                 <textarea id="additionalNotes" placeholder="Нэмэлт заавар хуудас оруулна уу...">Ямарч тохиолдолд ажилтнуудыг зам дээр ажил удирдагчгүй үлдээхгүй байх, ажлын шаардлагаар ажилтнуудыг орхин явах үед ажлыг зогсоон багаж хэрэгсэл болон замчдыг замаас гарсаны дараа ажил удирдагч явна.</textarea>
             </div>
 
-            <div class="footer-section batlav" data-view-unlocked="true">
+            <div class="footer-section batlav">
                 <label style="color: #000; text-align: center; font-size: 1.4em; font-weight: 900;">Боловсруулсан:</label>
-                <select id="preparedBy">
-                    <option value="ПДБ Т.Энхжаргал">ПДБ Т.Энхжаргал</option>
+                <select id="preparedBy" data-allow-view-edit="1">
                     <option value="ПДБ О.Батбаяр">ПДБ О.Батбаяр</option>
-                    <option value="ПДБ Т.Жамъяндагва">ПДБ Т.Жамъяндагва</option>
+                    <option value="ПДБ Т.Жаяъяндагва">ПДБ Т.Жаяъяндагва</option>
                     <option value="ПДБ Ц.Эрдэнэбаяр">ПДБ Ц.Эрдэнэбаяр</option>
                 </select>
                 <label>Хянасан:</label>
-                <select id="reviewedBy">
+                <select id="reviewedBy" data-allow-view-edit="1">
                     <option value="ПД Б.Энхсайхан">ПД Б.Энхсайхан</option>
-                    <option value="ПДБк Т.Энхжаргал">ПДБк Т.Энхжаргал</option>
+                    <option value="ПДБ Т.Энхжаргал">ПДБ Т.Энхжаргал</option>
                 </select>
-                <button type="button" class="save-btn" id="saveDataBtn">💾 Хадгалах</button>
+                <button type="button" class="save-btn" id="saveDataBtn" data-allow-view-edit="1">💾 Хадгалах</button>
             </div>
         </div>
 
@@ -1218,19 +1213,19 @@
                 "Г/Ж Н.Отгонтуяа",
                 "Г/Ж Б.Гантөгс",
                 "Г/Ж Ц.Сувдмаа",
-                "жолооч Ч.Базарсад",
-          
+                "жолооч Ч.Базарсад",                            
             ];
-            const LOCKED_EMPLOYEE_NAMES = Array.from(new Set(
-                DEFAULT_EMPLOYEE_NAMES.map(normalizeName).filter(Boolean)
-            )).sort((left, right) => left.localeCompare(right, "mn"));
-            const LOCKED_EMPLOYEE_NAME_SET = new Set(LOCKED_EMPLOYEE_NAMES);
             let savedRecords = [];
             let employeeNames = [];
             let selectedNames = new Set();
+            const DEFAULT_EMPLOYEE_NAME_SET = new Set(DEFAULT_EMPLOYEE_NAMES.map(normalizeName));
 
         function normalizeName(value) {
             return value ? value.trim().replace(/\s+/g, " ") : "";
+        }
+
+        function isAllowedEmployeeName(name) {
+            return DEFAULT_EMPLOYEE_NAME_SET.has(normalizeName(name));
         }
 
         function persistEmployeeNames() {
@@ -1239,10 +1234,6 @@
             } catch (error) {
                 console.error("Employee names save error:", error);
             }
-        }
-
-        function isAllowedEmployeeName(name) {
-            return LOCKED_EMPLOYEE_NAME_SET.has(normalizeName(name));
         }
 
         function clearWorkerDraft() {
@@ -1261,7 +1252,7 @@
             }));
 
             const payload = {
-                selectedNames: Array.from(selectedNames).filter(isAllowedEmployeeName),
+                selectedNames: Array.from(selectedNames),
                 workers,
                 recentSelectionHtml: recentSelectionPanel ? recentSelectionPanel.innerHTML : "",
                 recentSelectionVisible: recentSelectionPanel ? recentSelectionPanel.style.display === "block" : false
@@ -1354,7 +1345,9 @@
 
                 const parsed = JSON.parse(raw);
                 const selectedFromDraft = Array.isArray(parsed?.selectedNames)
-                    ? parsed.selectedNames.map(normalizeName).filter(isAllowedEmployeeName)
+                    ? parsed.selectedNames
+                        .map(normalizeName)
+                        .filter((name) => name && isAllowedEmployeeName(name))
                     : [];
                 selectedNames = new Set(selectedFromDraft);
 
@@ -1375,11 +1368,21 @@
                 }
 
                 if (recentSelectionPanel) {
-                    recentSelectionPanel.innerHTML = "";
-                    recentSelectionPanel.style.display = "none";
+                    recentSelectionPanel.innerHTML = parsed?.recentSelectionHtml || "";
+                    Array.from(recentSelectionPanel.querySelectorAll(".recent-selection-item")).forEach((item) => {
+                        if (!isAllowedEmployeeName(item.textContent || "")) {
+                            item.remove();
+                        }
+                    });
+                    Array.from(recentSelectionPanel.querySelectorAll(".recent-selection-entry")).forEach((entry) => {
+                        if (entry.querySelectorAll(".recent-selection-item").length === 0) {
+                            entry.remove();
+                        }
+                    });
+                    recentSelectionPanel.style.display = parsed?.recentSelectionVisible && recentSelectionPanel.querySelectorAll(".recent-selection-entry").length > 0
+                        ? "block"
+                        : "none";
                 }
-
-                saveWorkerDraft();
             } catch (error) {
                 console.error("Worker draft load error:", error);
                 clearWorkerDraft();
@@ -1387,24 +1390,30 @@
         }
 
         function loadEmployeeNames() {
-            employeeNames = [...LOCKED_EMPLOYEE_NAMES];
-            persistEmployeeNames();
+            try {
+                employeeNames = [...DEFAULT_EMPLOYEE_NAME_SET].sort((left, right) => left.localeCompare(right, "mn"));
+                persistEmployeeNames();
+            } catch (error) {
+                console.error("Employee names load error:", error);
+                employeeNames = [...DEFAULT_EMPLOYEE_NAME_SET].sort((left, right) => left.localeCompare(right, "mn"));
+                persistEmployeeNames();
+            }
         }
 
         function setEmployeeNames(nextNames) {
-            employeeNames = Array.from(new Set(nextNames.map(normalizeName).filter(isAllowedEmployeeName))).sort((left, right) => left.localeCompare(right, "mn"));
+            employeeNames = [...DEFAULT_EMPLOYEE_NAME_SET].sort((left, right) => left.localeCompare(right, "mn"));
             persistEmployeeNames();
             renderNameOptions();
         }
 
         function addEmployeeName(name) {
             const normalized = normalizeName(name);
-            if (!normalized || !nameSearchInput) {
+            if (!normalized) {
                 return false;
             }
 
             if (!isAllowedEmployeeName(normalized)) {
-                alert(`\"${normalized}\" нэр жагсаалтад байхгүй байна. Зөвхөн жагсаалтад байгаа нэрийг сонгоно уу.`);
+                alert(`\"${normalized}\" нэр жагсаалтад байхгүй тул нэмэгдэхгүй.`);
                 return false;
             }
 
@@ -1415,12 +1424,10 @@
         }
 
         function editEmployeeName(oldName) {
-            void oldName;
             alert("Нэр засах боломж хаалттай.");
         }
 
         function deleteEmployeeName(name) {
-            void name;
             alert("Нэр устгах боломж хаалттай.");
         }
 
@@ -1456,7 +1463,7 @@
                 emptyState.className = "name-options-empty";
                 emptyState.innerHTML = query
                     ? `<strong>${nameSearchInput.value}</strong> нэр олдсонгүй`
-                    : "Хайх нэрээ оруулж жагсаалтаас сонгоно уу.";
+                    : "Одоогоор сонгох нэрийн жагсаалт хоосон байна.";
                 nameOptions.appendChild(emptyState);
                 updateNameSelectionSummary();
                 return;
@@ -1496,7 +1503,6 @@
                 const text = document.createElement("span");
                 text.className = "name-option-text";
                 text.textContent = name;
-
                 body.appendChild(text);
 
                 label.appendChild(checkbox);
@@ -1513,11 +1519,8 @@
                 return;
             }
 
-            if (!addEmployeeName(newName)) {
-                return;
-            }
-
-            if (nameSearchInput) {
+            const isSelected = addEmployeeName(newName);
+            if (isSelected && nameSearchInput) {
                 nameSearchInput.value = "";
             }
             renderNameOptions();
@@ -1893,7 +1896,9 @@
                 selectedNames.clear();
                 updateNameSelectionSummary();
                 renderNameOptions();
-                nameSearchInput.focus();
+                if (nameSearchInput) {
+                    nameSearchInput.focus();
+                }
                 saveWorkerDraft();
             } else {
                 alert("Чекээр дор хаяж нэг нэр сонгож, ажлын нэр оруулна уу!");
@@ -1903,7 +1908,6 @@
         addWorkerBtn.addEventListener("click", handleAddWorker);
 
         if (addNameOptionBtn) {
-            addNameOptionBtn.title = "Шинэ нэр нэмэх боломж хаалттай";
             addNameOptionBtn.addEventListener("click", seedNameFromInput);
         }
 
