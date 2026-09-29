@@ -617,6 +617,64 @@
     .main.fullscreen-main #content-frame {
       min-height: calc(100dvh - var(--topbar-height));
     }
+    body.video-page .topbar,
+    body.video-page .sidebar,
+    body.video-page .sidebar-overlay,
+    body.video-page .copyright-badge {
+      display: none;
+    }
+    body.video-page .main {
+      position: fixed;
+      inset: 0;
+      z-index: 1300;
+      width: 100vw;
+      height: 100dvh;
+      min-height: 100dvh;
+      padding: 0;
+      overflow: hidden;
+      background: #000;
+      background-image: none;
+    }
+    body.video-page .dashboard,
+    body.video-page .content-frame-wrap {
+      width: 100%;
+      height: 100%;
+      min-height: 100%;
+      max-height: 100%;
+      border: 0;
+      border-radius: 0;
+      box-shadow: none;
+      background: #000;
+    }
+    body.video-page #content-frame {
+      width: 100%;
+      height: 100%;
+      min-height: 100%;
+      flex: 1;
+    }
+    .video-close {
+      display: none;
+    }
+    body.video-page .video-close {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      z-index: 1301;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      border-radius: 6px;
+      background: rgba(0, 0, 0, 0.65);
+      color: #fff;
+      font-size: 20px;
+      cursor: pointer;
+    }
+    body.video-page .video-close:hover {
+      background: rgba(0, 0, 0, 0.9);
+    }
 
     .sidebar-overlay {
       position: fixed;
@@ -1003,6 +1061,10 @@
         <a href="#" class="sidebar-link" id="habea-link" data-page-key="ХАБЭА-н үзлэг"><i class="fa fa-layer-group"></i>ХАБЭА-н үзлэг</a>
       </div>
 
+      <div class="sidebar-item">
+        <a href="#" class="sidebar-link" id="surgalt-link" data-page-key="Сургалт"><i class="fa fa-graduation-cap"></i> Сургалт</a>
+      </div>
+
       <div class="sidebar-divider"></div>
       <div class="sidebar-item has-sub" onclick="toggleSub(this)">
         <div class="sidebar-link"><i class="fa fa-calculator"></i> Паспортын үзлэг</div>
@@ -1041,6 +1103,7 @@
           <span id="frame-title-label" style="margin-left:8px; font-family:'Share Tech Mono',monospace; font-size:11px;">ХЭСГИЙН ТАНИЛЦУУЛГА</span>
         </div>
         <iframe id="content-frame" src="./heseg.html" frameborder="0" style="width:100%;" allow="camera *; microphone *; autoplay *; clipboard-write *; encrypted-media *; gyroscope *; picture-in-picture *; fullscreen *"></iframe>
+        <button class="video-close" id="video-close" type="button" aria-label="Бичлэгээс гарах" title="Бичлэгээс гарах"><i class="fa fa-xmark"></i></button>
       </div>
     </div>
   </main>
@@ -1057,6 +1120,9 @@
   };
   const FRAME_STORAGE_PREFIX = 'ubtz:autosave:';
   const EDIT_UNLOCK_CODE = '85!2$7419';
+  const VIDEO_PAGE_KEY = 'Зааварчилгаа / Тор засагч';
+  const VIDEO_PAGE_SRC = 'https://www.youtube.com/embed/tjzEKLEMjsM?autoplay=1&rel=0';
+  let previousPageKey = 'Хэсгийн танилцуулга';
   const FULLSCREEN_PAGE_KEYS = new Set([
     'Ажлын бүртгэл',
     'Хурлын тэмдэглэл'
@@ -1231,6 +1297,7 @@
     'Нөөц зам төмрийн судалгаа': 'nootsZT.html',
     'Уулзварын зайн судалгаа': 'uZai.html',
     'ХАБЭА-н үзлэг': 'habea.html',
+    'Сургалт': 'surgalt.html',
     'Паспортын үзлэг': 'passport.html',
     'Замын техникийн байдал': 'tech.html',
     'Хэсгийн танилцуулга': 'heseg.html',
@@ -1506,6 +1573,7 @@
       return;
     }
     main.classList.toggle('fullscreen-main', FULLSCREEN_PAGE_KEYS.has(pageKey));
+    document.body.classList.toggle('video-page', pageKey === VIDEO_PAGE_KEY);
   }
 
   function getFrameContentHeight(doc) {
@@ -1696,8 +1764,11 @@
     const frame = document.getElementById('content-frame');
     const frameTitle = document.getElementById('frame-title-label');
     const titleText = clickedElement.textContent.trim().replace(/\s+/g, ' ');
+    if (pageKey !== VIDEO_PAGE_KEY) {
+      previousPageKey = pageKey;
+    }
     syncFramePresentation(pageKey);
-    frame.src = resolvePageSrc(pageKey, titleText);
+    frame.src = pageKey === VIDEO_PAGE_KEY ? VIDEO_PAGE_SRC : resolvePageSrc(pageKey, titleText);
     writeLastPage(pageKey);
     if (frameTitle) {
       frameTitle.textContent = titleText.toUpperCase();
@@ -1717,6 +1788,16 @@
     const sidebarToggle = document.getElementById('sidebar-toggle');
     const sidebarOverlay = document.getElementById('sidebar-overlay');
     const modeToggle = document.getElementById('mode-toggle');
+    const videoClose = document.getElementById('video-close');
+
+    if (videoClose) {
+      videoClose.addEventListener('click', function() {
+        const previousPageElement = findPageElement(previousPageKey) || document.getElementById('heseg-link');
+        if (previousPageElement) {
+          loadFramePage(previousPageKey, previousPageElement);
+        }
+      });
+    }
 
     if (frame) {
       frame.addEventListener('load', function() {
@@ -1760,6 +1841,13 @@
 
     document.addEventListener('keydown', function(event) {
       if (event.key === 'Escape') {
+        if (document.body.classList.contains('video-page')) {
+          const previousPageElement = findPageElement(previousPageKey) || document.getElementById('heseg-link');
+          if (previousPageElement) {
+            loadFramePage(previousPageKey, previousPageElement);
+          }
+          return;
+        }
         closeSidebar();
       }
     });
