@@ -194,7 +194,7 @@
             display: block;
             visibility: hidden;
             white-space: nowrap;
-            padding: 10px 42px 10px 15px;
+            padding: 10px 15px;
             border: 2px solid transparent;
             border-radius: 10px;
             font-size: 14px;
@@ -958,7 +958,7 @@
             .header-form input[type="number"] { width: 70px; }
             .header-form input[type="datetime-local"] { min-width: 160px; }
             .header-form select { min-width: 140px; max-width: 100%; }
-            .work-type-sizer { font-size: 11px; padding: 5px 34px 5px 8px; }
+            .work-type-sizer { font-size: 11px; padding: 5px 8px; }
             #workType { min-width: 0; }
         }
 
@@ -1007,46 +1007,10 @@
                 <span>КМ-ИЙН</span>
                 <input type="number" id="meter2" placeholder="0">
                 <span>ЗУУТЫГ ДУУCТАЛ</span>
-                <span class="work-type-select-wrap">
+                <div class="work-type-select-wrap">
                     <span id="workTypeSizer" class="work-type-sizer" aria-hidden="true"></span>
-                    <select id="workType">
-                        <option value="СУМЫН БАШМАК ЦЭВЭРЛЭХ, ГЭМТЭЛ ЗАСАХ">СУМЫН БАШМАК ЦЭВЭРЛЭХ, ГЭМТЭЛ ЗАСАХ</option>
-                        <option value="ДЭР МОД НЭГЧИЛЭН СОЛИХ">ДЭР МОД НЭГЧИЛЭН СОЛИХ</option>
-                        <option value="ЧИГ ТАТАХ">ЧИГ ТАТАХ</option>
-                        <option value="ТУСГААРЛАХ УУЛЗВАР ЗАДАЛЖ ЦЭВЭРЛЭХ">ТУСГААРЛАХ УУЛЗВАР ЗАДАЛЖ ЦЭВЭРЛЭХ</option>
-                        <option value="ШУУДУУ СЭРГЭЭХ">ШУУДУУ СЭРГЭЭХ</option>
-                        <option value="ЗАМ ТӨМРИЙН ШАМРАЛТ АВАХ">ЗАМ ТӨМРИЙН ДУХНЫ ШАМРАЛТ АВАХ</option>
-                        <option value="ТӨМӨР БЕТОН ДЭР НЭГЧИЛЭН СОЛИХ">ТӨМӨР БЕТОН ДЭР НЭГЧИЛЭН СОЛИХ</option>
-                        <option value="ПАСПОРТЫН ҮЗЛЭГ ХИЙХ">ПАСПОРТЫН ҮЗЛЭГ ХИЙХ</option>
-                        <option value="ЭЛС ЦЭВЭРЛЭХ">ЭЛС ЦЭВЭРЛЭХ</option>
-                        <option value="ЗАМ ТӨМӨР СОЛИХ">ЗАМ ТӨМӨР СОЛИХ</option>
-                        <option value="ДАРААЛСАН 3-С ИЛҮҮГҮЙ ДЭРИЙН ҮЗҮҮР ХАНЗАЛЖ ЦАРИГ ТОХИРУУЛАХ">ДАРААЛСАН 3-С ИЛҮҮГҮЙ ДЭРИЙН ҮЗҮҮР ХАНЗАЛЖ ЦАРИГ ТОХИРУУЛАХ</option>
-                        <option value="ЗАНЫГ 20 ММ ХҮРТЭЛ ӨРГӨЖ ЦАХИЛГААН ЧИГЖҮҮРЭЭР ЧИГЖИХ" selected>ЗАНЫГ 20 ММ ХҮРТЭЛ ӨРГӨЖ ЦАХИЛГААН ЧИГЖҮҮРЭЭР ЧИГЖИХ</option>
-                        <option value="ЖИЖИГ ХЭРЭГЛЭЛ АЧИЖ БУУЛГАХ" selected>ЖИЖИГ ХЭРЭГЛЭЛ АЧИЖ БУУЛГАХ</option>
-                        <option value="ЗАМ ӨРГӨЖ ЧИГЖИХ" selected>ЗАМ ӨРГӨЖ ЧИГЖИХ</option>
-                        <option value="ЖИЙРГЭЭР ОВОЙЛТ ТҮВШИН ЗАСАХ" selected>ЖИЙРГЭЭР ОВОЙЛТ ТҮВШИН ЗАСАХ</option>
-                        <option value="ЦАРИГ САЛГАЖ УУЛЗВАРЫН ЗАЙ ХӨӨЖ ТОХИРУУЛАХ" selected>ЦАРИГ САЛГАЖ УУЛЗВАРЫН ЗАЙ ХӨӨЖ ТОХИРУУЛАХ</option>
-                        <option value="УУЛЗВАРЫН ЗАЙ ТОХИРУУЛАХ" selected>УУЛЗВАРЫН ЗАЙ ТОХИРУУЛАХ</option>
-                        <option value="ЧИГЖЭЭС ШУУХ" selected>ЧИГЖЭЭС ШУУХ</option>
-                        <option value="ПОДРЕЛЬС ГАРГАХ" selected>ПОДРЕЛЬС ГАРГАХ</option>
-                        <option value="ЦАС ЦЭВЭРЛЭХ" selected>ЦАС ЦЭВЭРЛЭХ</option>
-                        <option value="ЗАМЫН НОГОО ЦЭВЭРЛЭХ" selected>ЗАМЫН НОГОО ЦЭВЭРЛЭХ</option>
-                        <option value="ХАДААС ТУУШ ДАВТАХ" selected>ХАДААС ТУУШ ДАВТАХ</option>
-                        <option value="УУЛЗВАРГҮЙ ЗАМД ХҮЧДЭЛ ТОХИРУУЛАХ" selected>УУЛЗВАРГҮЙ ЗАМД ХҮЧДЭЛ ТОХИРУУЛАХ</option>
-                        <option value="ДҮНЗ ЗӨӨЖ ХУРААХ" selected>ДҮНЗ ЗӨӨЖ ХУРААХ</option>
-                        <option value="ТООНОЛЖ СОЛИХ" selected>ТООНОЛЖ СОЛИХ</option>
-                        <option value="ЗАМ СУМ ЦЭВЭРЛЭХ" selected>ЗАМ СУМ ЦЭВЭРЛЭХ</option>
-                        <option value="ТАШСАН ДЭР ЗАСАХ" selected>ТАШСАН ДЭР ЗАСАХ</option>
-                        <option value="ДЭРИЙН ҮЗҮҮР БООХ" selected>ДЭРИЙН ҮЗҮҮР БООХ</option>
-                        <option value="СУМАН ШИЛЖҮҮЛЭГ СОЛИХ" selected>СУМАН ШИЛЖҮҮЛЭГ СОЛИХ</option>
-                        <option value="ЗАМ ТӨМӨР ТАЙРАХ" selected>ЗАМ ТӨМӨР ТАЙРАХ</option>
-                        <option value="ЗАМ ТӨМӨР НҮХЛЭХ" selected>ЗАМ ТӨМӨР НҮХЛЭХ</option>
-                        <option value="ҮЕРИЙН ЭРГҮҮЛ" selected>ҮЕРИЙН ЭРГҮҮЛ</option>
-                        <option value="СУМЫН МЕТАЛЛ ХЭСЭГ БУДАГ" selected>СУМЫН МЕТАЛЛ ХЭСЭГ БУДАГ</option>
-                        <option value="СУМЫН ОРДИНАТ ТОХИРУУЛАХ" selected>СУМЫН ОРДИНАТ ТОХИРУУЛАХ</option>
-                        <option value="ЗАМЫН ДОХИО ТЭМДЭГТ СОЛИХ ЗАСАХ" selected>ЗАМЫН ДОХИО ТЭМДЭГТ СОЛИХ ЗАСАХ</option>
-                    </select>
-                </span>
+                    <input type="text" id="workType" placeholder="ХИЙХ АЖИЛАА БИЧНЭ ҮҮ../ТК-6 Зам өргөж чигжих болон ТК-9 цариг тохируулах/" aria-label="Ажлын нэршил" autocomplete="off">
+                </div>
                 <span>АЖИЛ ХИЙНЭ.</span>
             </div>
         </div>
@@ -1099,7 +1063,7 @@
                             <option value="https://youtu.be/af1u0-En3kk">ТК-52 Ташсан дэр засах</option>
                             <option value="https://youtu.be/3AkSIhs7Eos">ТК-57 Зам төмрийн босоо хажуу зөрүү засах</option>
                             <option value="https://youtu.be/QZ9sHX1Z4WI">ТК-58 Замын болон дохионы тэмдэгт сэргээх</option>
-                            <option value="https://youtu.be/ZbK28eylBDs">ТК-100 Ургамлын хор тэргэнцэрээр цацах</option>
+                            <option value="https://youtu.be/ZbK28eylBDs">ТК-100 Ургамлын хор тэргэнцэрээр цацах/option>
                             <option value="https://youtu.be/EzSvsvFNvTc">ТК-50 ТБД бэхлэгээ солих</option>
                             <option value="https://youtu.be/RS46kkadx7I">ТК-53 КД бэхэлгээтэй замд модон дэр нэгчилэн солих</option>
                             <option value="https://youtu.be/Ayo_RgIcvCc">ТК-54 Зам төмрийн комиссын үзлэг хийх</option>
@@ -1135,9 +1099,9 @@
             </div>
 
             <div class="worker-section">
-                <h2 style="font-size:1.4em; font-weight:900; color:#fff; color: #000; letter-spacing:1px; text-align: center;">Ажил хуваарилалт</h2>
+                <h2 style="font-size:1.4em; font-weight:900; color:#fff; color: #000; letter-spacing:1px; text-align: center;">ТК видеотой танилцсан</h2>
                 <div class="worker-form">
-                    <input type="text" id="job" placeholder="Ажлын нэр">
+                    <input type="text" id="job" placeholder="Технологийн карт № ..., хорио хамгаалалт">
                     <div class="name-selector">
                         <div class="name-selector-meta">
                             <span>Товшиж сонгох</span>
@@ -1145,7 +1109,7 @@
                         </div>
                         <div id="nameOptions" class="name-options"></div>
                     </div>
-                    <button id="add-worker">+ Ажилтан нэмэх</button>
+                    <button id="add-worker">+ Үргэлжлүүлэх</button>
                     <div id="recentSelectionPanel" class="recent-selection-panel"></div>
                 </div>
                 <ul id="worker-list"></ul>
@@ -1239,7 +1203,7 @@
                 "Г/Ж Н.Отгонтуяа",
                 "Г/Ж Б.Гантөгс",
                 "Г/Ж Ц.Сувдмаа",
-                "жолооч Ч.Базарсад",                            
+                "жолооч Ч.Базарсад",                           
             ];
             let savedRecords = [];
             let employeeNames = [];
@@ -1557,8 +1521,7 @@
                 return;
             }
 
-            const selectedOption = workTypeSelect.options[workTypeSelect.selectedIndex];
-            workTypeSizer.textContent = selectedOption ? selectedOption.text : "";
+            workTypeSizer.textContent = workTypeSelect.value || workTypeSelect.placeholder;
         }
 
         function syncWorkerSectionHeight() {
@@ -1811,7 +1774,7 @@
             }
         }
 
-        workTypeSelect.addEventListener("change", updateWorkTypeWidth);
+        workTypeSelect.addEventListener("input", updateWorkTypeWidth);
         window.addEventListener("resize", updateWorkTypeWidth);
         window.addEventListener("resize", syncWorkerSectionHeight);
 
@@ -2079,7 +2042,7 @@
                         </div>
                         ${record.workers.length > 0 ? `
                         <div class="workers-list">
-                            <h4>Ажилтнууд:</h4>
+                            <h4>Ажил гүйцэтгэх үеийн аюулгүй ажиллагааны бичлэг үзсэн ажилтанууд</h4>
                             <ul>
                                 ${record.workers.map(w => {
                                     const workerName = w?.name || "Нэргүй";
